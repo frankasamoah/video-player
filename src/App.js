@@ -1,28 +1,109 @@
 
 import './App.css';
-import { useRef } from 'react';
-import VideoPlayer from './VideoPlayer';
+import { useRef , useState, useEffect} from 'react';
+// import VideoPlayer from './VideoPlayer';
 import vid from "./assets/sintel-short.mp4";
 
 
 function App() {
+
   const video = useRef(null);
-  const {
-    playerState,
-    togglePlay,
-    handleOnTimeUpdate,
-    handleVideoProgress,
-    handleVideoSpeed,
-    toggleMute,
-  } = VideoPlayer(video);
+
+  // ^ STATE
+  
+  const [playerState, setPlayerState] = useState({
+    isPlaying: false,
+    progress: 0,
+    speed: 1,
+    isMuted: false,
+  });
+
+  // ^PLAY OR PAUSE FUNCTION
+
+  const togglePlay = () => {
+    setPlayerState({
+      ...playerState,
+      isPlaying: !playerState.isPlaying,
+    });
+  };
+
+  //& play or pause the video through the value of the isPlaying property
+
+  useEffect(() => {
+    playerState.isPlaying
+      ? video.current.play()
+      : video.current.pause();
+  }, [playerState.isPlaying, video]);
+
+
+  // ^ PROGRESS BAR
+
+  const handleVideoDuration = () => {
+    const progress = (video.current.currentTime / video.current.duration) * 100;
+    setPlayerState({
+      ...playerState,
+      progress,
+    });
+  };
+
+  //& to be able to drag the progress bar
+
+  const handleDragProgressBar = (e) => {
+    const dragProgressBar = parseInt(e.target.value);
+    video.current.currentTime = (video.current.duration / 100) * dragProgressBar;
+    setPlayerState({
+      ...playerState,
+      progress: dragProgressBar,
+    });
+  };
+
+  // ^ VIDEO SPEED
+
+  const handleVideoSpeed = (e) => {
+    const speed = parseInt(e.target.value);
+    video.current.playbackRate = speed;
+    setPlayerState({
+      ...playerState,
+      speed,
+    });
+  };
+
+
+  // ^ MUTE FUNCTION
+
+  const toggleMute = () => {
+    setPlayerState({
+      ...playerState,
+      isMuted: !playerState.isMuted,
+    });
+  };
+
+  //& mute or not through the value of the isMuted property
+
+  useEffect(() => {
+    playerState.isMuted
+      ? (video.current.muted = true)
+      : (video.current.muted = false);
+  }, [playerState.isMuted, video]);
+
+
+
+  // const {
+  //   playerState,
+  //   togglePlay,
+  //   handleOnTimeUpdate,
+  //   handleVideoProgress,
+  //   handleVideoSpeed,
+  //   toggleMute,
+  // } = VideoPlayer(video);
 
   return (
     <div className="container">
-      <div className="video-wrapper">
+      <div className="container-video">
         <video
           src={vid}
           ref={video}
-          onTimeUpdate={handleOnTimeUpdate}
+          onTimeUpdate={handleVideoDuration}
         />
         <div className="controls">
           <div className="actions">
@@ -39,10 +120,10 @@ function App() {
             min="0"
             max="100"
             value={playerState.progress}
-            onChange={(e) => handleVideoProgress(e)}
+            onChange={(e) => handleDragProgressBar(e)}
           />
           <select
-            className="velocity"
+            className="speed"
             value={playerState.speed}
             onChange={(e) => handleVideoSpeed(e)}
           >
