@@ -1,31 +1,23 @@
-import {useState, useEffect, useReducer} from 'react';
+import {useState, useEffect} from 'react';
 
 const VideoPlayer = (video) => {
 
-    // const [playerState, setPlayerState] = useState({
-    //   isPlaying: false,
-    //   progress: 0,
-    //   speed: 1,
-    //   isMuted: false,
-    // });
+// const [isPlaying, setIsPlaying] = useState(false);
+// const [speed, setSpeed] = useState(1);
+// const [progress, setProgress] = useState(0);
+// const [isMuted, setIsMuted] = useState(false);
 
-    const initialState = {
+
+    const [playerState, setPlayerState] = useState({
       isPlaying: false,
       progress: 0,
       speed: 1,
       isMuted: false,
-    };
+    });
 
-    const [state, dispatch] = useReducer(reducerFunction, initialState);
+    
 
-    // ^ REDUCER FUNCTION
 
-    // & contains state is an object which has the same key-value pairs as the initialState
-    // & and then an ACTION which is also an object containing a type of action and payload
-
-    const reducerFunction = (state, action) => {
-     const {type, payload} = action
-    }
 
     // ^PLAY OR PAUSE FUNCTION
 

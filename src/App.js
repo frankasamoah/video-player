@@ -1,101 +1,76 @@
 
 import './App.css';
 import { useRef , useState, useEffect} from 'react';
-// import VideoPlayer from './VideoPlayer';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 import vid from "./assets/sintel-short.mp4";
 
 
 function App() {
 
   const video = useRef(null);
-
-  // ^ STATE
   
-  const [playerState, setPlayerState] = useState({
-    isPlaying: false,
-    progress: 0,
-    speed: 1,
-    isMuted: false,
-  });
+  // ^ STATE
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [progress, setProgress] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  
 
   // ^PLAY OR PAUSE FUNCTION
 
   const togglePlay = () => {
-    setPlayerState({
-      ...playerState,
-      isPlaying: !playerState.isPlaying,
-    });
+    setIsPlaying(!isPlaying);
+
   };
 
   //& play or pause the video through the value of the isPlaying property
 
   useEffect(() => {
-    playerState.isPlaying
+    isPlaying
       ? video.current.play()
       : video.current.pause();
-  }, [playerState.isPlaying, video]);
+  }, [isPlaying, video]);
 
 
-  // ^ PROGRESS BAR
+  // ^ PROGRESS
 
-  const handleVideoDuration = () => {
-    const progress = (video.current.currentTime / video.current.duration) * 100;
-    setPlayerState({
-      ...playerState,
-      progress,
-    });
+
+  // & progress of the video
+  const handleVideoProgress = () => {
+    const vidProgress = (video.current.currentTime / video.current.duration) * 100;
+    setProgress(vidProgress);
   };
 
   //& to be able to drag the progress bar
-
   const handleDragProgressBar = (e) => {
     const dragProgressBar = parseInt(e.target.value);
     video.current.currentTime = (video.current.duration / 100) * dragProgressBar;
-    setPlayerState({
-      ...playerState,
-      progress: dragProgressBar,
-    });
+    setProgress(dragProgressBar);
   };
 
   // ^ VIDEO SPEED
-
   const handleVideoSpeed = (e) => {
-    const speed = parseInt(e.target.value);
+    const newSpeed = parseInt(e.target.value);
     video.current.playbackRate = speed;
-    setPlayerState({
-      ...playerState,
-      speed,
-    });
+    setSpeed(newSpeed);
   };
 
 
   // ^ MUTE FUNCTION
 
   const toggleMute = () => {
-    setPlayerState({
-      ...playerState,
-      isMuted: !playerState.isMuted,
-    });
+    setIsMuted(!isMuted);
   };
 
   //& mute or not through the value of the isMuted property
 
   useEffect(() => {
-    playerState.isMuted
+    isMuted
       ? (video.current.muted = true)
       : (video.current.muted = false);
-  }, [playerState.isMuted, video]);
+  }, [isMuted, video]);
 
-
-
-  // const {
-  //   playerState,
-  //   togglePlay,
-  //   handleOnTimeUpdate,
-  //   handleVideoProgress,
-  //   handleVideoSpeed,
-  //   toggleMute,
-  // } = VideoPlayer(video);
 
   return (
     <div className="container">
@@ -103,15 +78,15 @@ function App() {
         <video
           src={vid}
           ref={video}
-          onTimeUpdate={handleVideoDuration}
+          onTimeUpdate={handleVideoProgress}
         />
         <div className="controls">
           <div className="actions">
             <button onClick={togglePlay}>
-              {!playerState.isPlaying ? (
-                <i className="bx bx-play"></i>
+              {!isPlaying ? (
+                <FontAwesomeIcon icon={faPlay} />
               ) : (
-                <i className="bx bx-pause"></i>
+                <FontAwesomeIcon icon={faPause} />
               )}
             </button>
           </div>
@@ -119,12 +94,12 @@ function App() {
             type="range"
             min="0"
             max="100"
-            value={playerState.progress}
+            value={progress}
             onChange={(e) => handleDragProgressBar(e)}
           />
           <select
             className="speed"
-            value={playerState.speed}
+            value={speed}
             onChange={(e) => handleVideoSpeed(e)}
           >
             <option value="0.50">0.50x</option>
@@ -133,7 +108,7 @@ function App() {
             <option value="2">2x</option>
           </select>
           <button className="mute-btn" onClick={toggleMute}>
-            {!playerState.isMuted ? (
+            {!isMuted ? (
               <i className="bx bxs-volume-full"></i>
             ) : (
               <i className="bx bxs-volume-mute"></i>
