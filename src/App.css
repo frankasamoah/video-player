@@ -1,20 +1,47 @@
-body {
-  background: #EEEEEE;
+
+#App {
+  height: 100vh;
+  border: 5px solid #b23f41;
+  width: 60rem;
+  min-width: 80%;
+  display: flex;
+  place-content: center;
+  margin: auto;
 }
+
 
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  
 }
 
-h1 {
-  color: white;
-}
 
-video {
+
+.container-video video {
   width: 100%;
+}
+
+
+.container-img-text {
+  margin-bottom: 5rem;
+  text-align: center;
+  
+}
+
+
+.container-img-text span {
+  font-weight: 400;
+  color: #de4548;
+}
+
+
+.container-img-text p {
+  font-family: 'Lato', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
 }
 
 .container-video {
@@ -65,27 +92,21 @@ video {
 }
 
 input[type="range"] {
-  /* -webkit-appearance: none !important; */
+  
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  border-radius: 10px;
   height: 4px;
   width: 350px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  /* -webkit-appearance: none !important; */
   cursor: pointer;
   height: 6px;
 }
 
-input[type="range"]::-moz-range-progress {
-  background: white;
-}
+
 
 .speed {
   appearance: none;
   background: none;
-  color: white;
+  color: #2c2b2a;
   outline: none;
   border: none;
   text-align: center;
@@ -98,7 +119,6 @@ input[type="range"]::-moz-range-progress {
   outline: none;
   cursor: pointer;
 }
-
 .mute-btn i {
   background-color: none;
   color: white;

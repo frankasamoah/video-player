@@ -2,8 +2,9 @@
 import './App.css';
 import { useRef , useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faVolumeMute, faVolumeHigh, faFilm} from "@fortawesome/free-solid-svg-icons";
 import vid from "./assets/sintel-short.mp4";
+import logo from "./assets/logo.png"
 
 
 function App() {
@@ -11,33 +12,28 @@ function App() {
   const video = useRef(null);
   
   // ^ STATE
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [play, setPlay] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [progress, setProgress] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
+  const [mute, setMute] = useState(false);
   
 
   // ^PLAY OR PAUSE FUNCTION
-
   const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-
+    setPlay(!play);
   };
 
   //& play or pause the video through the value of the isPlaying property
-
   useEffect(() => {
-    isPlaying
+    play
       ? video.current.play()
       : video.current.pause();
-  }, [isPlaying, video]);
+  }, [play, video]);
 
 
   // ^ PROGRESS
-
-
   // & progress of the video
-  const handleVideoProgress = () => {
+  const handleTimeUpdate = () => {
     const vidProgress = (video.current.currentTime / video.current.duration) * 100;
     setProgress(vidProgress);
   };
@@ -52,38 +48,43 @@ function App() {
   // ^ VIDEO SPEED
   const handleVideoSpeed = (e) => {
     const newSpeed = parseInt(e.target.value);
-    video.current.playbackRate = speed;
+    video.current.playbackRate = newSpeed;
     setSpeed(newSpeed);
   };
 
 
-  // ^ MUTE FUNCTION
-
+  // ^ MUTE FUNCTION 
   const toggleMute = () => {
-    setIsMuted(!isMuted);
+    setMute(!mute);
   };
 
-  //& mute or not through the value of the isMuted property
 
+
+  //& mute or not through the value of the isMuted property
   useEffect(() => {
-    isMuted
+    mute
       ? (video.current.muted = true)
       : (video.current.muted = false);
-  }, [isMuted, video]);
+  }, [mute, video]);
 
-
+//todo  ///////////////////////////////////////////////////////////////////////////////////////////////
   return (
+    <div id="App">
     <div className="container">
+      <div className="container-img-text">
+        <img src={logo} alt="player logo" />
+        <p>The best {" "}<FontAwesomeIcon icon={faFilm} /> {" "} <span>player</span> for all video formats</p>
+      </div>
       <div className="container-video">
         <video
           src={vid}
           ref={video}
-          onTimeUpdate={handleVideoProgress}
+          onTimeUpdate={handleTimeUpdate}
         />
         <div className="controls">
           <div className="actions">
             <button onClick={togglePlay}>
-              {!isPlaying ? (
+              {!play ? (
                 <FontAwesomeIcon icon={faPlay} />
               ) : (
                 <FontAwesomeIcon icon={faPause} />
@@ -108,16 +109,17 @@ function App() {
             <option value="2">2x</option>
           </select>
           <button className="mute-btn" onClick={toggleMute}>
-            {!isMuted ? (
-              <i className="bx bxs-volume-full"></i>
+            {!mute ? (
+              <FontAwesomeIcon icon={faVolumeHigh} />
             ) : (
-              <i className="bx bxs-volume-mute"></i>
+              <FontAwesomeIcon icon={faVolumeMute} />
             )}
           </button>
         </div>
       </div>
     </div>
+    </div>
   );
 }
-
+//todo  ///////////////////////////////////////////////////////////////////////////////////////////////
 export default App;
