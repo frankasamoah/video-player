@@ -4,7 +4,7 @@ import { useRef , useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faVolumeMute, faVolumeHigh, faFilm} from "@fortawesome/free-solid-svg-icons";
 import vid from "./assets/sintel-short.mp4";
-import logo from "./assets/logo.png"
+import logo from "./assets/logo2.png"
 
 
 function App() {
